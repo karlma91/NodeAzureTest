@@ -5,7 +5,13 @@ var express = require('express'),
 module.exports = function (app) {
   app.use('/', router);
 };
-
+// for Facebook verification
+router.get('/webhook/', function (req, res) {
+    if (req.query['hub.verify_token'] === 'testtoken') {
+        res.send(req.query['hub.challenge'])
+    }
+    res.send('Error, wrong token')
+})
 router.get('/', function (req, res, next) {
   var articles = [new Article(), new Article()];
     res.render('index', {
@@ -13,3 +19,4 @@ router.get('/', function (req, res, next) {
       articles: articles
     });
 });
+
