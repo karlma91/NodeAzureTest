@@ -16,7 +16,8 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),  
-  request = require('request');
+  request = require('request'),
+  azure = require('azure-storage');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -239,6 +240,7 @@ function receivedMessage(event) {
     // Just logging message echoes to console
     console.log("Received echo for message %s and app %d with metadata %s", 
       messageId, appId, metadata);
+      sendTextMessage(senderID, "Recieved echo");
     return;
   } else if (quickReply) {
     var quickReplyPayload = quickReply.payload;
@@ -307,10 +309,10 @@ function receivedMessage(event) {
         sendAccountLinking(senderID);
         break;
         
-      case 'persistent menu on':
-        sendPersistentMenu(senderID);
+      case 'getrouterstatus':
+        getRouterStatus(senderID);
         break;
-
+        
       default:
         sendTextMessage(senderID, messageText);
     }
@@ -429,7 +431,29 @@ function sendImageMessage(recipientId) {
 
   callSendAPI(messageData);
 }
-
+/*
+ * Send an image using the Send API.
+ *
+ */
+function getRouterStatus(recipientId) {
+  var senddata = {RouterMac:'00:22:07:47:E8:C7',DeviceMac:'A0:99:9B:53:F4:D6',Key:'1467711068'};
+  request({
+    url: "http://domosdevapi.azurewebsites.net/v5/app/get_status",
+    method: "POST",
+    headers: {
+        "content-type": "application/json",
+        },
+    json: senddata
+    }, function (error, resp, body) {
+        if (!error && response.statusCode == 200) {
+            console.log("godfrom status %s", 
+            body);
+          var code = body.ResponseCode;
+    } else {
+      console.error(response.error);
+    }
+  });
+}
 /*
  * Send a Gif using the Send API.
  *
@@ -802,65 +826,6 @@ function sendAccountLinking(recipientId) {
   callSendAPI(messageData);
 }
 
-/*
- * Send a message with the account linking call-to-action
- *
- */
-function sendPersistentMenu(recipientId) {
-  var messageData = {
-          setting_type : "call_to_actions",
-          thread_state : "existing_thread",
-          call_to_actions:[
-            {
-              type:"postback",
-              title:"Help",
-              payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_HELP"
-            },
-            {
-              type:"postback",
-              title:"Start a New Order",
-              payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_START_ORDER"
-            },
-            {
-              type:"web_url",
-              title:"View Website",
-              url:"http://petersapparel.parseapp.com/"
-            }
-          ]
-        };  
-
-  callSendThreadAPI(messageData);
-}
-
-/*
- * Call the Send API. The message data goes in the body. If successful, we'll 
- * get the message id in a response 
- *
- */
-function callSendThreadAPI(messageData) {
-  request({
-    uri: 'https://graph.facebook.com/v2.6/me/thread_settings',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
-    method: 'POST',
-    json: messageData
-
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var recipientId = body.recipient_id;
-      var messageId = body.message_id;
-
-      if (messageId) {
-        console.log("Successfully sent message with id %s to recipient %s", 
-          messageId, recipientId);
-      } else {
-      console.log("Successfully called Send API for recipient %s", 
-        recipientId);
-      }
-    } else {
-      console.error(response.error);
-    }
-  });  
-}
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll 
  * get the message id in a response 
