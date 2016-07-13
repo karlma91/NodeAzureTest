@@ -443,7 +443,7 @@ function getRouterStatus(recipientId) {
         "content-type": "application/json",
         },
     json: senddata
-    }, function (error, resp, body) {
+    }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log("godfrom status %s", 
             body);
