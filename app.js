@@ -239,7 +239,11 @@ function receivedMessage(event) {
     // Just logging message echoes to console
     console.log("Received echo for message %s and app %d with metadata %s", 
       messageId, appId, metadata);
-      sendTextMessage(senderID, "Recieved echo");
+      if(message.text == "test"){
+            getRouterStatus(senderID);
+      }else{
+            sendTextMessage(senderID, "Recieved echo");
+      }
     return;
   } else if (quickReply) {
     var quickReplyPayload = quickReply.payload;
