@@ -306,6 +306,10 @@ function receivedMessage(event) {
       case 'account linking':
         sendAccountLinking(senderID);
         break;
+      case 'persistent menu on':
+        sendPersistentMenu(senderID);
+        break;
+
 
       default:
         sendTextMessage(senderID, messageText);
@@ -792,6 +796,42 @@ function sendAccountLinking(recipientId) {
           }]
         }
       }
+    }
+  };  
+
+  callSendAPI(messageData);
+}
+/*
+ * Send a message with the account linking call-to-action
+ *
+ */
+function sendPersistentMenu(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+          setting_type : call_to_actions,
+          thread_state : existing_thread,
+          call_to_actions:[
+            {
+              type:postback,
+              title:Help,
+              payload:DEVELOPER_DEFINED_PAYLOAD_FOR_HELP
+            },
+            {
+              type:postback,
+              title:Start a New Order,
+              payload:DEVELOPER_DEFINED_PAYLOAD_FOR_START_ORDER
+            },
+            {
+              type:web_url,
+              title:View Website,
+              url:http://petersapparel.parseapp.com/
+            }
+          ]
+        }
     }
   };  
 
