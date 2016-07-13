@@ -448,6 +448,11 @@ function getRouterStatus(recipientId) {
         if (!error && response.statusCode == 200) {
             var code = body.ResponseCode;
             var text = body.ResponseText;
+            if(code == "OK"){
+                sendTextMessage(senderID, text.RouterStatusText);
+            }else{
+                sendTextMessage(senderID, text);
+            }
             console.log("got from getrouterstatus: %s, %s", 
             code,text);
     } else {
