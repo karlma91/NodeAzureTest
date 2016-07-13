@@ -435,7 +435,7 @@ function sendImageMessage(recipientId) {
  *
  */
 function getRouterStatus(recipientId) {
-  var senddata = {RouterMac:'00:22:07:47:E8:C7',DeviceMac:'A0:99:9B:53:F4:D6',Key:'1467711068'};
+  var senddata = {RouterMac:'00:22:07:47:E8:C7',DeviceMac:'Backdoor1467711068',Key:'1467711068'};
   request({
     url: "http://domosdevapi.azurewebsites.net/v5/app/get_status",
     method: "POST",
