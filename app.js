@@ -801,6 +801,7 @@ function sendAccountLinking(recipientId) {
 
   callSendAPI(messageData);
 }
+
 /*
  * Send a message with the account linking call-to-action
  *
@@ -812,23 +813,23 @@ function sendPersistentMenu(recipientId) {
     },
     message: {
       attachment: {
-          setting_type : call_to_actions,
-          thread_state : existing_thread,
+          setting_type : "call_to_actions",
+          thread_state : "existing_thread",
           call_to_actions:[
             {
-              type:postback,
-              title:Help,
-              payload:DEVELOPER_DEFINED_PAYLOAD_FOR_HELP
+              type:"postback",
+              title:"Help",
+              payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_HELP"
             },
             {
-              type:postback,
-              title:Start a New Order,
-              payload:DEVELOPER_DEFINED_PAYLOAD_FOR_START_ORDER
+              type:"postback",
+              title:"Start a New Order",
+              payload:"DEVELOPER_DEFINED_PAYLOAD_FOR_START_ORDER"
             },
             {
-              type:web_url,
-              title:View Website,
-              url:http://petersapparel.parseapp.com/
+              type:"web_url",
+              title:"View Website",
+              url:"http://petersapparel.parseapp.com/"
             }
           ]
         }
