@@ -308,12 +308,12 @@ function receivedMessage(event) {
         sendAccountLinking(senderID);
         break;
         
-      case 'getrouterstatus':
+      case 'show router status':
         getRouterStatus(senderID);
         break;
         
       default:
-        sendTextMessage(senderID, messageText);
+        //sendTextMessage(senderID, messageText);
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
