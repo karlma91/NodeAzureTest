@@ -808,11 +808,6 @@ function sendAccountLinking(recipientId) {
  */
 function sendPersistentMenu(recipientId) {
   var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
           setting_type : "call_to_actions",
           thread_state : "existing_thread",
           call_to_actions:[
@@ -832,13 +827,40 @@ function sendPersistentMenu(recipientId) {
               url:"http://petersapparel.parseapp.com/"
             }
           ]
-        }
-    }
-  };  
+        };  
 
-  callSendAPI(messageData);
+  callSendThreadAPI(messageData);
 }
 
+/*
+ * Call the Send API. The message data goes in the body. If successful, we'll 
+ * get the message id in a response 
+ *
+ */
+function callSendThreadAPI(messageData) {
+  request({
+    uri: 'https://graph.facebook.com/v2.6/me/thread_settings',
+    qs: { access_token: PAGE_ACCESS_TOKEN },
+    method: 'POST',
+    json: messageData
+
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var recipientId = body.recipient_id;
+      var messageId = body.message_id;
+
+      if (messageId) {
+        console.log("Successfully sent message with id %s to recipient %s", 
+          messageId, recipientId);
+      } else {
+      console.log("Successfully called Send API for recipient %s", 
+        recipientId);
+      }
+    } else {
+      console.error(response.error);
+    }
+  });  
+}
 /*
  * Call the Send API. The message data goes in the body. If successful, we'll 
  * get the message id in a response 
