@@ -445,9 +445,10 @@ function getRouterStatus(recipientId) {
     json: senddata
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log("godfrom status %s", 
-            body);
-          var code = body.ResponseCode;
+            var code = body.ResponseCode;
+            var text = body.ResponseText;
+            console.log("got from getrouterstatus %s, %s", 
+            code,text);
     } else {
       console.error(response.error);
     }
