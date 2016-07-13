@@ -439,15 +439,16 @@ function getRouterStatus(recipientId) {
   request({
     url: "http://domosdevapi.azurewebsites.net/v5/app/get_status",
     method: "POST",
+    json: true,
     headers: {
         "content-type": "application/json",
         },
-    json: senddata
+    body: senddata
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var code = body.ResponseCode;
             var text = body.ResponseText;
-            console.log("got from getrouterstatus %s, %s", 
+            console.log("got from getrouterstatus: %s, %s", 
             code,text);
     } else {
       console.error(response.error);
