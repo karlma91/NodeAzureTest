@@ -449,9 +449,9 @@ function getRouterStatus(recipientId) {
             var code = body.ResponseCode;
             var text = body.ResponseText;
             if(code == "OK"){
-                sendTextMessage(senderID, text.RouterStatusText);
+                sendTextMessage(recipientId, text.RouterStatusText);
             }else{
-                sendTextMessage(senderID, text);
+                sendTextMessage(recipientId, text);
             }
             console.log("got from getrouterstatus: %s, %s", 
             code,text);
