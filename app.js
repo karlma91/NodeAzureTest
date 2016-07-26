@@ -315,9 +315,12 @@ function receivedMessage(event) {
       case 'show router status':
         getRouterStatus(senderID);
         break;
+      case 'dial':
+        getDialogues(senderID);
+        break;
         
       default:
-        sendTextMessage(senderID, messageText);
+        //sendTextMessage(senderID, messageText);
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
@@ -464,6 +467,38 @@ function getRouterStatus(recipientId) {
     }
   });
 }
+/*
+ * Send an image using the Send API.
+ *
+ */
+function getDialogues(recipientId) {
+  var senddata = {RouterMac:'00:22:07:47:E8:C7',DeviceMac:'Backdoor1467711068',Key:'1467711068'};
+  request({
+    url: "http://stresstestdomos.azurewebsites.net/v5/app/get_status",
+    method: "POST",
+    json: true,
+    headers: {
+        "content-type": "application/json",
+        },
+    body: senddata
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var code = body.ResponseCode;
+            var text = body.ResponseText;
+            if(code == "OK"){
+                sendTextMessage(recipientId, text.RouterStatusText);
+            }else{
+                sendTextMessage(recipientId, text);
+            }
+            console.log("got from getrouterstatus: %s, %s", 
+            code,text);
+    } else {
+      console.error(response.error);
+    }
+  });
+}
+
+
 /*
  * Send a Gif using the Send API.
  *
