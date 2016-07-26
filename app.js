@@ -292,7 +292,7 @@ function receivedMessage(event) {
         sendReceiptMessage(senderID);
         break;
 
-      case 'quick reply':
+      case 'quick':
         sendQuickReply(senderID);
         break;        
 
@@ -773,13 +773,13 @@ function sendQuickReply(recipientId) {
       quick_replies: [
         {
           "content_type":"text",
-          "title":"Action",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION"
+          "title":"Help",
+          "payload":"help"
         },
         {
           "content_type":"text",
-          "title":"Comedy",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
+          "title":"Hello",
+          "payload":"Hello"
         },
         {
           "content_type":"text",
