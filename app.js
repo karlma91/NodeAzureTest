@@ -506,12 +506,13 @@ function getDialogues(recipientId) {
                 diags.forEach(function(diag) {
                   var element = {
                     title: diag['TitleText'],
+                    subtitle: diag['Category'],
                     buttons:[
                       {
                         type:"postback",
                         title:"Start Chatting",
                         payload:"ID" + diag['ID']
-                      }           
+                      }
                     ]
                   }
                   elements.push(element);
