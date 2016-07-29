@@ -486,38 +486,38 @@ function getDialogues(recipientId) {
             var code = body.ResponseCode;
             var text = body.ResponseText;
             if(code == "OK"){ // transform data here
-              sendTextMessage(recipientId, "Howdy");
-                // var messageData = {
-                //   recipient: {
-                //     id: recipientId
-                //   },
-                //   message: {
-                //     attachment: {
-                //       type: "template",
-                //       payload: {
-                //         template_type: "generic",
-                //         elements: []
-                //       }
-                //     }
-                //   }
-                // };  
-                // var elements = [];
-                // var diags = JSON.parse(text);
-                // diags.forEach(function(diag) {
-                //   var element = {
-                //     title: diag['TitleText'],
-                //     buttons:[
-                //       {
-                //         type:"web_url",
-                //         url:"domos.io",
-                //         title:"View Website"
-                //       }           
-                //     ]
-                //   }
-                //   elements.push(element);
-                // }, this);
-                // messageData.message.attachment.elements = elements;
-                // callSendAPI(messageData);
+              //sendTextMessage(recipientId, "Howdy");
+                var messageData = {
+                  recipient: {
+                    id: recipientId
+                  },
+                  message: {
+                    attachment: {
+                      type: "template",
+                      payload: {
+                        template_type: "generic",
+                        elements: []
+                      }
+                    }
+                  }
+                };  
+                var elements = [];
+                var diags = text;
+                diags.forEach(function(diag) {
+                  var element = {
+                    title: diag['TitleText'],
+                    buttons:[
+                      {
+                        type:"web_url",
+                        url:"domos.io",
+                        title:"View Website"
+                      }           
+                    ]
+                  }
+                  elements.push(element);
+                }, this);
+                messageData.message.attachment.payload.elements = elements;
+                callSendAPI(messageData);
 
             }else{
                 sendTextMessage(recipientId, text);
