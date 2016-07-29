@@ -472,9 +472,9 @@ function getRouterStatus(recipientId) {
  *
  */
 function getDialogues(recipientId) {
-  var senddata = {RouterMac:'00:22:07:47:E8:C7',DeviceMac:'Backdoor1467711068',Key:'1467711068'};
+  var senddata = {RouterMac:'00:22:07:47:E8:C7',DeviceMac:'78:F8:82:B6:B7:AD',Key:'1467711068'};
   request({
-    url: "http://stresstestdomos.azurewebsites.net/v5/app/get_status",
+    url: "http://stresstestdomos.azurewebsites.net/v5/app/get_dashboard_dialogues",
     method: "POST",
     json: true,
     headers: {
@@ -485,8 +485,40 @@ function getDialogues(recipientId) {
         if (!error && response.statusCode == 200) {
             var code = body.ResponseCode;
             var text = body.ResponseText;
-            if(code == "OK"){
-                sendTextMessage(recipientId, text.RouterStatusText);
+            if(code == "OK"){ // transform data here
+                
+                var messageData = {
+                  recipient: {
+                    id: recipientId
+                  },
+                  message: {
+                    attachment: {
+                      type: "template",
+                      payload: {
+                        template_type: "generic",
+                        elements: []
+                      }
+                    }
+                  }
+                };  
+                elemets = [];
+                var diags = JSON.parse(text);
+                diags.forEach(function(diag) {
+                  var element = {
+                    "title": diag['TitleText'],
+                    "buttons":[
+                      {
+                        "type":"web_url",
+                        "url":"domos.io",
+                        "title":"View Website"
+                      }           
+                    ]
+                  }
+                  elemets.push(element);
+                }, this);
+                messageData.message.attachment.elements = elemets;
+                callSendAPI(messageData);
+
             }else{
                 sendTextMessage(recipientId, text);
             }
@@ -494,6 +526,7 @@ function getDialogues(recipientId) {
             code,text);
     } else {
       console.error(response.error);
+      sendTextMessage(recipientId, "Error getting dialogues");
     }
   });
 }
