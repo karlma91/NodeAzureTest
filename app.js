@@ -501,22 +501,22 @@ function getDialogues(recipientId) {
                     }
                   }
                 };  
-                elemets = [];
+                var elements = [];
                 var diags = JSON.parse(text);
                 diags.forEach(function(diag) {
                   var element = {
-                    "title": diag['TitleText'],
-                    "buttons":[
+                    title: diag['TitleText'],
+                    buttons:[
                       {
-                        "type":"web_url",
-                        "url":"domos.io",
-                        "title":"View Website"
+                        type:"web_url",
+                        url:"domos.io",
+                        title:"View Website"
                       }           
                     ]
                   }
-                  elemets.push(element);
+                  elements.push(element);
                 }, this);
-                messageData.message.attachment.elements = elemets;
+                messageData.message.attachment.elements = elements;
                 callSendAPI(messageData);
 
             }else{
