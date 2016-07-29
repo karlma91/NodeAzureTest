@@ -508,9 +508,9 @@ function getDialogues(recipientId) {
                     title: diag['TitleText'],
                     buttons:[
                       {
-                        type:"web_url",
-                        url:"domos.io",
-                        title:"View Website"
+                        type:"postback",
+                        title:"Start Chatting",
+                        payload:"ID" + diag['ID']
                       }           
                     ]
                   }
