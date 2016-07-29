@@ -486,7 +486,7 @@ function getDialogues(recipientId) {
             var code = body.ResponseCode;
             var text = body.ResponseText;
             if(code == "OK"){ // transform data here
-                
+              sendTextMessage(recipientId, text);
                 var messageData = {
                   recipient: {
                     id: recipientId
