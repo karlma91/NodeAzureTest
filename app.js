@@ -486,7 +486,6 @@ function getDialogues(recipientId) {
             var code = body.ResponseCode;
             var text = body.ResponseText;
             if(code == "OK"){ // transform data here
-              //sendTextMessage(recipientId, "Howdy");
                 var messageData = {
                   recipient: {
                     id: recipientId
@@ -515,7 +514,9 @@ function getDialogues(recipientId) {
                       }
                     ]
                   }
-                  elements.push(element);
+                  if(elements.length<4){
+                    elements.push(element);
+                  }
                 }, this);
                 messageData.message.attachment.payload.elements = elements;
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
@@ -911,6 +912,7 @@ function sendAccountLinking(recipientId) {
  *
  */
 function callSendAPI(messageData) {
+   console.log("callSendAPI"); 
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
