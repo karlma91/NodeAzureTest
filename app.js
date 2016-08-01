@@ -381,7 +381,7 @@ function receivedPostback(event) {
 
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+  //sendTextMessage(senderID, "Postback called");
 }
 
 /*
@@ -394,6 +394,9 @@ function getBubbles(diagid, recipientId){
     DialogueID:diagid,
     NumberOfDialogues:1,
     Key:'1467711068'};
+
+var returntext = '';
+
   request({
     url: "http://stresstestdomos.azurewebsites.net/v5/app/get_dialogue",
     method: "POST",
