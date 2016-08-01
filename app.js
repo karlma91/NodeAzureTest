@@ -411,6 +411,7 @@ function getBubbles(diagid){
               
               var bubbles = text['Bubbles'];
               var sendtext = '';
+              var i = 0;
               for(i = 0; i<bubbles.length; i++)
               {
                   sendtext += bubbles[i]['Text'];
