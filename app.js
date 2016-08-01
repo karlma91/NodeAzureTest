@@ -16,7 +16,16 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),  
-  request = require('request');
+  request = require('request'),
+  azure = require('azure-storage');
+
+var nconf = require('nconf');
+nconf.env().file({ file: 'config.json', search: true });
+
+var accountName = nconf.get("STORAGE_NAME");
+var accountKey = nconf.get("STORAGE_KEY");
+
+var tableservice = azure.createTableService(accountName, accountKey);
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -72,7 +81,27 @@ app.get('/webhook', function(req, res) {
   }  
 });
 
-
+app.get('/test', function (req, res) {
+  var tablename = "routerlog";
+  var PartitionKey = "Router";
+  var RowKey = "00:22:07:47:E8:C7";
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
+  if(!error){
+    // result contains the entity
+    console.log("Got data");
+    res.write(JSON.stringify(result));
+    res.end();
+  }else{
+    console.log("Error getting data");
+    res.write(JSON.stringify({hello:'error'}));
+    res.end();
+  }
+});
+console.log("test");
+//res.write(JSON.stringify({hello:'test'}));
+//res.end();
+});
 /*
  * All callbacks for Messenger are POST-ed. They will be sent to the same
  * webhook. Be sure to subscribe your app to your page to receive callbacks
