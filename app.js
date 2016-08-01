@@ -369,13 +369,48 @@ function receivedPostback(event) {
   // The 'payload' param is a developer-defined field which is set in a postback 
   // button for Structured Messages. 
   var payload = event.postback.payload;
-
-  console.log("Received postback for user %d and page %d with payload '%s' " + 
+  if(payload.indexOf("DIAL") != -1){
+    console.log("Received postback for DIAG user %d and page %d with payload '%s' " + 
     "at %d", senderID, recipientID, payload, timeOfPostback);
+    var pays = payload.split('_');
+    getBubbles(pays[1]);
+  }else{
+    console.log("Received postback for user %d and page %d with payload '%s' " + 
+      "at %d", senderID, recipientID, payload, timeOfPostback);
+  }
 
   // When a postback is called, we'll send a message back to the sender to 
   // let them know it was successful
   sendTextMessage(senderID, "Postback called");
+}
+
+/*
+Get all bubbles for a single dialogue
+*/
+function getBubbles(diagid){
+  var senddata = {
+    RouterMac:'00:22:07:47:E8:C7',
+    DeviceMac:'78:F8:82:B6:B7:AD',
+    DialogueID:diagid,
+    NumberOfDialogues:0,
+    Key:'1467711068'};
+  request({
+    url: "http://stresstestdomos.azurewebsites.net/v5/app/get_dialogue",
+    method: "POST",
+    json: true,
+    headers: {
+        "content-type": "application/json",
+        },
+    body: senddata
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var code = body.ResponseCode;
+            var text = body.ResponseText;
+            if(code == "OK"){ // transform data here
+              console.log("getBubles: %s", text);
+            }
+        }
+    });
 }
 
 /*
@@ -510,7 +545,7 @@ function getDialogues(recipientId) {
                       {
                         type:"postback",
                         title:"Start Chatting",
-                        payload:"ID" + diag['ID']
+                        payload:"DIAL_" + diag['ID']
                       }
                     ]
                   }
