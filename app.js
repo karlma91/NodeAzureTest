@@ -414,7 +414,9 @@ function getBubbles(diagid, recipientId){
               var i = 0;
               for(i = 0; i<bubbles.length; i++)
               {
+                if(bubbles[i]['DialogueID'] == diagid){
                   sendtext += bubbles[i]['Text'];
+                }
               }
               var messageData = {
                   recipient: {
@@ -425,7 +427,8 @@ function getBubbles(diagid, recipientId){
                   }
                 };  
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
-                callSendAPI(messageData);
+                //callSendAPI(messageData);
+                sendTextMessage(sendtext);
             }
         }
     });
