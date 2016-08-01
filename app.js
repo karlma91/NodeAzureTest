@@ -523,8 +523,7 @@ function getDialogues(recipientId) {
             }else{
                 sendTextMessage(recipientId, text);
             }
-            console.log("got from getrouterstatus: %s, %s", 
-            code,text);
+            console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(text));
     } else {
       console.error(response.error);
       sendTextMessage(recipientId, "Error getting dialogues");
