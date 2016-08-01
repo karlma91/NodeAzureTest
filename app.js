@@ -392,7 +392,7 @@ function getBubbles(diagid){
     RouterMac:'00:22:07:47:E8:C7',
     DeviceMac:'78:F8:82:B6:B7:AD',
     DialogueID:diagid,
-    NumberOfDialogues:0,
+    NumberOfDialogues:1,
     Key:'1467711068'};
   request({
     url: "http://stresstestdomos.azurewebsites.net/v5/app/get_dialogue",
@@ -407,7 +407,24 @@ function getBubbles(diagid){
             var code = body.ResponseCode;
             var text = body.ResponseText;
             if(code == "OK"){ // transform data here
-              console.log("getBubles: %s", text);
+              console.log("getBubles: %s", JSON.stringify(text));
+              
+              var bubbles = text['Bubbles'];
+              var sendtext = '';
+              for(i = 0; i<bubbles.length; i++)
+              {
+                  sendtext += bubbles[i]['Text'];
+              }
+              var messageData = {
+                  recipient: {
+                    id: recipientId
+                  },
+                  message: {
+                   text:sendtext
+                  }
+                };  
+                console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
+                callSendAPI(messageData);
             }
         }
     });
