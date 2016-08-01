@@ -431,7 +431,7 @@ var returntext = '';
                 };  
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
                 //callSendAPI(messageData);
-                sendTextMessage(sendtext);
+                sendTextMessage(recipientId, sendtext);
             }
         }
     });
