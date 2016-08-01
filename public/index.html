@@ -13,13 +13,7 @@ LICENSE file in the root directory of this source tree.
   </head>
   <body>
     <script>
-      var setappid = function(){
-        var textfield = document.getElementById("myText");
-        if(!textfield) return;
-        var sendto = document.getElementById("sendto");
-        if(!sendto) return;
-        sendto.setAttribute("data-ref", textfield.value)
-      }
+
       window.fbAsyncInit = function() {
         FB.init({
           appId: 'APP_ID',
@@ -28,13 +22,21 @@ LICENSE file in the root directory of this source tree.
         });
       };
 
-      (function(d, s, id){
+      var tocall = function(d, s, id){
          var js, fjs = d.getElementsByTagName(s)[0];
          if (d.getElementById(id)) {return;}
          js = d.createElement(s); js.id = id;
          js.src = "//connect.facebook.net/en_US/sdk.js";
          fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
+       };
+      var setappid = function(){
+        var textfield = document.getElementById("myText");
+        if(!textfield) return;
+        var sendto = document.getElementById("sendto");
+        if(!sendto) return;
+        sendto.setAttribute("data-ref", textfield.value)
+        tocall(document, 'script', 'facebook-jssdk')
+      }
     </script>
 
     <h1>Messenger Demo</h1>
