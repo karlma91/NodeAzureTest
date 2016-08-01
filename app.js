@@ -374,6 +374,7 @@ function receivedPostback(event) {
     "at %d", senderID, recipientID, payload, timeOfPostback);
     var pays = payload.split('_');
     getBubbles(pays[1], recipientID);
+    sleep(1000);
   }else{
     console.log("Received postback for user %d and page %d with payload '%s' " + 
       "at %d", senderID, recipientID, payload, timeOfPostback);
@@ -695,7 +696,7 @@ function sendTextMessage(recipientId, messageText) {
       metadata: "DEVELOPER_DEFINED_METADATA"
     }
   };
-
+  
   callSendAPI(messageData);
 }
 
@@ -991,7 +992,7 @@ function callSendAPI(messageData) {
         recipientId);
       }
     } else {
-      console.error(response.error);
+      console.error(error);
     }
   });  
 }
