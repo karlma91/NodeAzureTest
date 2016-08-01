@@ -373,7 +373,7 @@ function receivedPostback(event) {
     console.log("Received postback for DIAG user %d and page %d with payload '%s' " + 
     "at %d", senderID, recipientID, payload, timeOfPostback);
     var pays = payload.split('_');
-    getBubbles(pays[1], recipientID);
+    getBubbles(pays[1], senderID, recipientID);
     //sleep(1000);
   }else{
     console.log("Received postback for user %d and page %d with payload '%s' " + 
@@ -388,7 +388,7 @@ function receivedPostback(event) {
 /*
 Get all bubbles for a single dialogue
 */
-function getBubbles(diagid, recipientId){
+function getBubbles(diagid, senderID, recipientId){
   var senddata = {
     RouterMac:'00:22:07:47:E8:C7',
     DeviceMac:'78:F8:82:B6:B7:AD',
@@ -432,7 +432,7 @@ var returntext = '';
                 };  
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
                 //callSendAPI(messageData);
-                sendTextMessage(recipientId, sendtext);
+                sendTextMessage(senderID, sendtext);
             }
         }
     });
