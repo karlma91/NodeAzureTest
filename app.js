@@ -87,20 +87,20 @@ app.get('/test', function (req, res) {
   var RowKey = "00:22:07:47:E8:C7";
   res.writeHead(200, { 'Content-Type': 'application/json' });
   tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
-  if(!error){
-    // result contains the entity
-    console.log("Got data");
-    res.write(JSON.stringify(result));
-    res.end();
-  }else{
-    console.log("Error getting data");
-    res.write(JSON.stringify({hello:'error'}));
-    res.end();
-  }
-});
-console.log("test");
-//res.write(JSON.stringify({hello:'test'}));
-//res.end();
+    if(!error){
+      // result contains the entity
+      console.log("Got data");
+      res.write(JSON.stringify(result));
+      res.end();
+    }else{
+      console.log("Error getting data");
+      res.write(JSON.stringify({hello:'error'}));
+      res.end();
+    }
+  });
+  console.log("test");
+  //res.write(JSON.stringify({hello:'test'}));
+  //res.end();
 });
 /*
  * All callbacks for Messenger are POST-ed. They will be sent to the same
@@ -227,7 +227,7 @@ function receivedAuthentication(event) {
 
   // When an authentication is received, we'll send a message back to the sender
   // to let them know it was successful.
-  sendTextMessage(senderID, "Authentication successful");
+  sendTextMessage(senderID, "Authentication successful " + passThroughParam);
 }
 
 /*

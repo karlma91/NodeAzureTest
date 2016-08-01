@@ -13,6 +13,13 @@ LICENSE file in the root directory of this source tree.
   </head>
   <body>
     <script>
+      var setappid = function(){
+        var textfield = document.getElementById("myText");
+        if(!textfield) return;
+        var sendto = document.getElementById("sendto");
+        if(!sendto) return;
+        sendto.setAttribute("data-ref", textfield.value)
+      }
       window.fbAsyncInit = function() {
         FB.init({
           appId: 'APP_ID',
@@ -31,11 +38,12 @@ LICENSE file in the root directory of this source tree.
     </script>
 
     <h1>Messenger Demo</h1>
-
+    <input type="text" id="myText" value="appid...">
+    <button onclick="setappid()">Click me</button>  
     <div>
       <p>The "Send to Messenger" plugin will trigger an authentication callback to your webhook.</p>
 
-      <div class="fb-send-to-messenger" 
+      <div id = "sendto" class="fb-send-to-messenger" 
         messenger_app_id='874282449384994'
         page_id='519854591426448'
         data-ref="PASS_THROUGH_PARAM" 
