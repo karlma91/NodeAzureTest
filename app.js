@@ -235,7 +235,7 @@ function receivedAuthentication(event) {
     RowKey: entGen.String(senderID),
     routermac: entGen.String(routermac),
     appid: entGen.String(appid),
-    recipientID:recipientID
+    recipientID: entGen.String(recipientID)
   };
 
   tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
@@ -243,17 +243,18 @@ function receivedAuthentication(event) {
       // result contains the entity
       console.log("Got data");
       if(result != null){
-        messengerToApp[senderID] = {routermac: routermac, appid: appid, recipientid: recipientID};
         tableservice.retrieveEntity("routerlog", "Router", routermac, function(error, result, response){
           if(!error){
-            messengerToApp[senderID].key = result.AppAuthKey['_'];
+            var rkey = result.AppAuthKey['_'];
+            messengerToApp[senderID] = {routermac: routermac, appid: appid, recipientid: recipientID, key: rkey};
+            entity.key = entGen.String(rkey);
+            tableservice.insertEntity('MessengerAuth',entity, function (error, result, response) {
+              if(!error){
+                console.log("Inserted to messengerauth");
+              }
+            });
           }
         });
-        tableservice.insertEntity('MessengerAuth',entity, function (error, result, response) {
-        if(!error){
-           console.log("Inserted to messengerauth");
-        }
-      });
         sendTextMessage(senderID, "Authentication successful");
       }else{
         sendTextMessage(senderID, "Authentication Failed");
