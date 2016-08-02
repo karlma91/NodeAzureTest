@@ -246,7 +246,7 @@ function receivedAuthentication(event) {
         messengerToApp[senderID] = {routermac: routermac, appid: appid, recipientid: recipientID};
         tableservice.retrieveEntity("routerlog", "Router", routermac, function(error, result, response){
           if(!error){
-            messengerToApp[senderID].key = result.AppAuthKey;
+            messengerToApp[senderID].key = result.AppAuthKey['_'];
           }
         });
         tableservice.insertEntity('MessengerAuth',entity, function (error, result, response) {
