@@ -234,7 +234,8 @@ function receivedAuthentication(event) {
     PartitionKey: entGen.String("Auth"),
     RowKey: entGen.String(senderID),
     routermac: entGen.String(routermac),
-    appid: entGen.String(appid)
+    appid: entGen.String(appid),
+    recipientID:recipientID
   };
 
   tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
@@ -243,6 +244,11 @@ function receivedAuthentication(event) {
       console.log("Got data");
       if(result != null){
         messengerToApp[senderID] = {routermac: routermac, appid: appid, recipientid: recipientID};
+        tableservice.retrieveEntity("routerlog", "Router", routermac, function(error, result, response){
+          if(!error){
+            messengerToApp[senderID].key = result.AppAuthKey;
+          }
+        });
         tableservice.insertEntity('MessengerAuth',entity, function (error, result, response) {
         if(!error){
            console.log("Inserted to messengerauth");
@@ -301,6 +307,11 @@ function receivedMessage(event) {
   var messageText = message.text;
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
+
+  if(!messengerToApp[senderID]){
+    sendTextMessage(senderID, "You are not authenticated");
+    return;
+  }
 
   if (isEcho) {
     // Just logging message echoes to console
@@ -599,7 +610,11 @@ function getRouterStatus(recipientId) {
  *
  */
 function getDialogues(recipientId) {
-  var senddata = {RouterMac:'00:22:07:47:E8:C7',DeviceMac:'78:F8:82:B6:B7:AD',Key:'1467711068'};
+  
+  var auth = messengerToApp[recipientId];
+  console.log(JSON.stringify(auth));
+
+  var senddata = {RouterMac:auth.routermac,DeviceMac:auth.appid,Key:auth.key};
   request({
     url: "http://stresstestdomos.azurewebsites.net/v5/app/get_dashboard_dialogues",
     method: "POST",
