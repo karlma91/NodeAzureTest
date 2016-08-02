@@ -33,6 +33,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
+var messengerToApp = {};
+
 /*
  * Be sure to setup your config values before running this code. You can 
  * set them using environment variables or modifying the config file in /config.
@@ -102,6 +104,7 @@ app.get('/test', function (req, res) {
   //res.write(JSON.stringify({hello:'test'}));
   //res.end();
 });
+
 /*
  * All callbacks for Messenger are POST-ed. They will be sent to the same
  * webhook. Be sure to subscribe your app to your page to receive callbacks
@@ -220,6 +223,41 @@ function receivedAuthentication(event) {
   // a way to do account linking when the user clicks the 'Send to Messenger' 
   // plugin.
   var passThroughParam = event.optin.ref;
+  var routermac = passThroughParam.split('_')[0];
+  var appid = passThroughParam.split('_')[1];
+  var tablename = "RouterAppTable";
+  var PartitionKey = routermac;
+  var RowKey = appid;
+
+  var entGen = azure.TableUtilities.entityGenerator;
+  var entity = {
+    PartitionKey: entGen.String("Auth"),
+    RowKey: entGen.String(senderID),
+    routermac: entGen.String(routermac),
+    appid: entGen.String(appid)
+  };
+
+  tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
+    if(!error){
+      // result contains the entity
+      console.log("Got data");
+      if(result != null){
+        messengerToApp[senderID] = {routermac: routermac, appid: appid, recipientid: recipientID};
+        tableservice.insertEntity('MessengerAuth',entity, function (error, result, response) {
+        if(!error){
+           console.log("Inserted to messengerauth");
+        }
+      });
+        sendTextMessage(senderID, "Authentication successful");
+      }else{
+        sendTextMessage(senderID, "Authentication Failed");
+      }
+    }else{
+      sendTextMessage(senderID, "Authentication Failed");
+    }
+  });
+
+
 
   console.log("Received authentication for user %d and page %d with pass " +
     "through param '%s' at %d", senderID, recipientID, passThroughParam, 
@@ -227,7 +265,7 @@ function receivedAuthentication(event) {
 
   // When an authentication is received, we'll send a message back to the sender
   // to let them know it was successful.
-  sendTextMessage(senderID, "Authentication successful " + passThroughParam);
+  
 }
 
 /*
