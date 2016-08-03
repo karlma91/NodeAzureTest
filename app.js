@@ -264,8 +264,6 @@ function receivedAuthentication(event) {
     }
   });
 
-
-
   console.log("Received authentication for user %d and page %d with pass " +
     "through param '%s' at %d", senderID, recipientID, passThroughParam, 
     timeOfAuth);
@@ -512,6 +510,9 @@ var returntext = '';
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
                 //callSendAPI(messageData);
                 sendTextMessage(senderID, sendtext);
+                if(bubbles[bubbles.length-1]['ResponseType']>0){
+                  sendQuickReply(senderID);
+                }
             }
         }
     });
@@ -664,7 +665,7 @@ function getDialogues(recipientId) {
                 messageData.message.attachment.payload.elements = elements;
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
                 callSendAPI(messageData);
-
+               
             }else{
                 sendTextMessage(recipientId, text);
             }
