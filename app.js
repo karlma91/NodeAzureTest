@@ -537,7 +537,7 @@ var returntext = '';
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel1'],
-                      "payload":payload
+                      "payload":JSON.stringify(payload)
                     });
                   }
                   if(rt >= 2){
@@ -545,7 +545,7 @@ var returntext = '';
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel2'],
-                      "payload":payload
+                      "payload":JSON.stringify(payload)
                     });
                   }
                   if(rt >= 3){
@@ -553,7 +553,7 @@ var returntext = '';
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel3'],
-                      "payload":payload
+                      "payload":JSON.stringify(payload)
                     });
                   }
                   sendBubbleWithButton(senderID, sendtext, buttons);
@@ -710,9 +710,8 @@ function getDialogues(recipientId) {
                   }
                 }, this);
                 messageData.message.attachment.payload.elements = elements;
-                console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
+                //console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
                 callSendAPI(messageData);
-               
             }else{
                 sendTextMessage(recipientId, text);
             }
@@ -1141,7 +1140,7 @@ function callSendAPI(messageData) {
         recipientId);
       }
     } else {
-      console.error("error: %s %s", error,JSON.stringify(response));
+      console.error("callSendAPI error: %s %s", error, JSON.stringify(response));
     }
   });  
 }
