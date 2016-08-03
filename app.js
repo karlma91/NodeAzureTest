@@ -324,9 +324,27 @@ function receivedMessage(event) {
     return;
   } else if (quickReply) {
     var quickReplyPayload = quickReply.payload;
-    console.log("Quick reply for message %s with payload %s",
-      messageId, quickReplyPayload);
-      if(quickReplyPayload.indexOf("BR") !== -1){
+    console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
+
+    if(quickReplyPayload.indexOf("RouterMac") !== -1){
+        var payload = JSON.parse(quickReplyPayload);
+        var auth = messengerToApp[senderID];
+        console.log(JSON.stringify(auth));
+
+      var returntext = '';
+      request({
+        url: "http://stresstestdomos.azurewebsites.net/v5/app/post_bubble_response",
+        method: "POST",
+        json: true,
+        headers: {
+            "content-type": "application/json",
+            },
+        body: payload
+        }, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+              getBubbles(payload['DialogueID'], senderID, recipientID);
+            }
+        });
         sendTextMessage(senderID, "You tapped " + quickReplyPayload + "text " + message.text);
       }else{
         sendTextMessage(senderID, "Quick reply tapped");
