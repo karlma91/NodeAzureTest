@@ -471,7 +471,7 @@ function receivedPostback(event) {
 Get all bubbles for a single dialogue
 */
 function getBubbles(diagid, senderID, recipientId){
-  var auth = messengerToApp[recipientId];
+  var auth = messengerToApp[senderID];
   console.log(JSON.stringify(auth));
 
   var senddata = {
