@@ -330,7 +330,7 @@ function receivedMessage(event) {
         var payload = JSON.parse(quickReplyPayload);
         var auth = messengerToApp[senderID];
         console.log("Sending post_response");
-        //console.log(JSON.stringify(payload));
+        console.log(JSON.stringify(payload));
 
       var returntext = '';
       request({
