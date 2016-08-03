@@ -509,9 +509,10 @@ var returntext = '';
                 };  
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
                 //callSendAPI(messageData);
-                sendTextMessage(senderID, sendtext);
                 if(bubbles[bubbles.length-1]['ResponseType']>0){
-                  sendQuickReply(senderID);
+                  sendBubbleWithButton(senderID, sendtext, bubbles[bubbles.length-1]['OptionLabel1']);
+                }else{
+                  sendTextMessage(senderID, sendtext);
                 }
             }
         }
@@ -953,6 +954,40 @@ function sendQuickReply(recipientId) {
         {
           "content_type":"text",
           "title":"Help",
+          "payload":"help"
+        },
+        {
+          "content_type":"text",
+          "title":"Hello",
+          "payload":"Hello"
+        },
+        {
+          "content_type":"text",
+          "title":"Drama",
+          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA"
+        }
+      ]
+    }
+  };
+
+  callSendAPI(messageData);
+}
+/*
+ * Send a message with Quick Reply buttons.
+ *
+ */
+function sendBubbleWithButton(recipientId, text, button1) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: text,
+      metadata: "DEVELOPER_DEFINED_METADATA",
+      quick_replies: [
+        {
+          "content_type":"text",
+          "title":button1,
           "payload":"help"
         },
         {
