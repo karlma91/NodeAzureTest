@@ -551,11 +551,11 @@ var returntext = '';
                     Key:auth.key,
                     DialogueID:diagid,
                     BubbleID:bubbleid,
-                    UserResponse:"string",
-                    OptionValue:"bolle"
+                    UserResponse:"",
+                    OptionValue: 0
                   };
                   if(rt >= 1){
-                    payload.UserResponse = ""+bubb['OptionValue1'];
+                    payload.OptionValue = ""+bubb['OptionValue1'];
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel1'],
@@ -563,7 +563,7 @@ var returntext = '';
                     });
                   }
                   if(rt >= 2){
-                    payload.UserResponse = ""+bubb['OptionValue2'];
+                    payload.OptionValue = ""+bubb['OptionValue2'];
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel2'],
@@ -571,7 +571,7 @@ var returntext = '';
                     });
                   }
                   if(rt >= 3){
-                    payload.UserResponse = ""+bubb['OptionValue3'];
+                    payload.OptionValue = ""+bubb['OptionValue3'];
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel3'],
