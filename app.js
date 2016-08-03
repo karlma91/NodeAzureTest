@@ -324,12 +324,13 @@ function receivedMessage(event) {
     return;
   } else if (quickReply) {
     var quickReplyPayload = quickReply.payload;
-    console.log("Quick reply for message %s with payload %s", messageId, quickReplyPayload);
+    console.log("Quick reply for message %s with payload", messageId);
 
     if(quickReplyPayload.indexOf("RouterMac") !== -1){
         var payload = JSON.parse(quickReplyPayload);
         var auth = messengerToApp[senderID];
-        console.log(JSON.stringify(auth));
+        console.log("Sending post_response");
+        //console.log(JSON.stringify(payload));
 
       var returntext = '';
       request({
@@ -342,10 +343,13 @@ function receivedMessage(event) {
         body: payload
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
+              console.log("post_response success");
               getBubbles(payload['DialogueID'], senderID, recipientID);
+            }else{
+              console.log("post_response fail");
             }
         });
-        sendTextMessage(senderID, "You tapped " + quickReplyPayload + "text " + message.text);
+        sendTextMessage(senderID, "You tapped " + message.text);
       }else{
         sendTextMessage(senderID, "Quick reply tapped");
       }
