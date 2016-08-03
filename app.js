@@ -326,8 +326,11 @@ function receivedMessage(event) {
     var quickReplyPayload = quickReply.payload;
     console.log("Quick reply for message %s with payload %s",
       messageId, quickReplyPayload);
-
-    sendTextMessage(senderID, "Quick reply tapped");
+      if(quickReplyPayload.indexOf("BR") !== -1){
+        sendTextMessage(senderID, "You tapped " + quickReplyPayload + "text " + message.text);
+      }else{
+        sendTextMessage(senderID, "Quick reply tapped");
+      }
     return;
   }
 
@@ -517,21 +520,21 @@ var returntext = '';
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel1'],
-                      "payload":"br_" + bubb['OptionValue1']
+                      "payload":"BR_" + bubb['OptionValue1']
                     });
                   }
                   if(rt >= 2){
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel2'],
-                      "payload":"br_" + bubb['OptionValue2']
+                      "payload":"BR_" + bubb['OptionValue2']
                     });
                   }
                   if(rt >= 3){
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel3'],
-                      "payload":"br_" + bubb['OptionValue3']
+                      "payload":"BR_" + bubb['OptionValue3']
                     });
                   }
                   sendBubbleWithButton(senderID, sendtext, buttons);
