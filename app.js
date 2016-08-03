@@ -349,7 +349,7 @@ function receivedMessage(event) {
               console.log("post_response fail");
             }
         });
-        sendTextMessage(senderID, "You tapped " + message.text);
+        //sendTextMessage(senderID, "You tapped " + message.text);
       }else{
         sendTextMessage(senderID, "Quick reply tapped");
       }
