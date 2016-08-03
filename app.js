@@ -510,7 +510,31 @@ var returntext = '';
                 console.log("got from Get_dialogues: %s, %s", code, JSON.stringify(messageData));
                 //callSendAPI(messageData);
                 if(bubbles[bubbles.length-1]['ResponseType']>0){
-                  sendBubbleWithButton(senderID, sendtext, bubbles[bubbles.length-1]['OptionLabel1']);
+                  var rt = bubbles[bubbles.length-1]['ResponseType'];
+                  var buttons = [];
+                  var bubb = bubbles[bubbles.length-1];
+                  if(rt >= 1){
+                    buttons.push({
+                      "content_type":"text",
+                      "title":bubb['OptionLabel1'],
+                      "payload":"br_" + bubb['OptionValue1']
+                    });
+                  }
+                  if(rt >= 2){
+                    buttons.push({
+                      "content_type":"text",
+                      "title":bubb['OptionLabel2'],
+                      "payload":"br_" + bubb['OptionValue2']
+                    });
+                  }
+                  if(rt >= 3){
+                    buttons.push({
+                      "content_type":"text",
+                      "title":bubb['OptionLabel3'],
+                      "payload":"br_" + bubb['OptionValue3']
+                    });
+                  }
+                  sendBubbleWithButton(senderID, sendtext, buttons);
                 }else{
                   sendTextMessage(senderID, sendtext);
                 }
@@ -976,7 +1000,7 @@ function sendQuickReply(recipientId) {
  * Send a message with Quick Reply buttons.
  *
  */
-function sendBubbleWithButton(recipientId, text, button1) {
+function sendBubbleWithButton(recipientId, text, quickreplies) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -984,23 +1008,7 @@ function sendBubbleWithButton(recipientId, text, button1) {
     message: {
       text: text,
       metadata: "DEVELOPER_DEFINED_METADATA",
-      quick_replies: [
-        {
-          "content_type":"text",
-          "title":button1,
-          "payload":"help"
-        },
-        {
-          "content_type":"text",
-          "title":"Hello",
-          "payload":"Hello"
-        },
-        {
-          "content_type":"text",
-          "title":"Drama",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA"
-        }
-      ]
+      quick_replies: quickreplies
     }
   };
 
