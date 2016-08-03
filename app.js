@@ -522,13 +522,11 @@ var returntext = '';
               console.log("getBubles: %s", JSON.stringify(text));
               
               var bubbles = text['Bubbles'];
-              var sendtext = '';
+              var sendtext = 'missing';
               var i = 0;
-              for(i = 0; i<bubbles.length; i++)
+              if(bubbles.length>0)
               {
-                if(bubbles[i]['DialogueID'] == diagid){
-                  sendtext += bubbles[i]['Text'];
-                }
+                sendtext = bubbles[bubbles.length-1]['Text'];
               }
               var messageData = {
                   recipient: {
