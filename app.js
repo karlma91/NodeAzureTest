@@ -445,7 +445,9 @@ function receivedPostback(event) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfPostback = event.timestamp;
-
+  if(!messengerToApp[senderID]){
+    sendTextMessage(senderID, "not autenticated");
+  }
   // The 'payload' param is a developer-defined field which is set in a postback 
   // button for Structured Messages. 
   var payload = event.postback.payload;
@@ -469,12 +471,16 @@ function receivedPostback(event) {
 Get all bubbles for a single dialogue
 */
 function getBubbles(diagid, senderID, recipientId){
+  var auth = messengerToApp[recipientId];
+  console.log(JSON.stringify(auth));
+
   var senddata = {
-    RouterMac:'00:22:07:47:E8:C7',
-    DeviceMac:'78:F8:82:B6:B7:AD',
+    RouterMac:auth.routermac,
+    DeviceMac:auth.appid,
+    Key:auth.key,
     DialogueID:diagid,
-    NumberOfDialogues:1,
-    Key:'1467711068'};
+    NumberOfDialogues:1
+  };
 
 var returntext = '';
 
@@ -514,27 +520,40 @@ var returntext = '';
                 //callSendAPI(messageData);
                 if(bubbles[bubbles.length-1]['ResponseType']>0){
                   var rt = bubbles[bubbles.length-1]['ResponseType'];
+                  var bubbleid = bubbles[bubbles.length-1]['BubbleID']; 
                   var buttons = [];
                   var bubb = bubbles[bubbles.length-1];
+                  var payload = { 
+                    RouterMac:auth.routermac,
+                    DeviceMac:auth.appid,
+                    Key:auth.key,
+                    DialogueID:diagid,
+                    BubbleID:bubbleid,
+                    UserResponse:"string",
+                    OptionValue:"bolle"
+                  };
                   if(rt >= 1){
+                    payload.UserResponse = ""+bubb['OptionValue1'];
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel1'],
-                      "payload":"BR_" + bubb['OptionValue1']
+                      "payload":payload
                     });
                   }
                   if(rt >= 2){
+                    payload.UserResponse = ""+bubb['OptionValue2'];
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel2'],
-                      "payload":"BR_" + bubb['OptionValue2']
+                      "payload":payload
                     });
                   }
                   if(rt >= 3){
+                    payload.UserResponse = ""+bubb['OptionValue3'];
                     buttons.push({
                       "content_type":"text",
                       "title":bubb['OptionLabel3'],
-                      "payload":"BR_" + bubb['OptionValue3']
+                      "payload":payload
                     });
                   }
                   sendBubbleWithButton(senderID, sendtext, buttons);
