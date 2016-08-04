@@ -310,10 +310,12 @@ function receivedMessage(event) {
   if(!messengerToApp[senderID]){
     var PartitionKey = "Auth";
     var RowKey = senderID;
+    Console.log("No authentication " + senderID)
+    Console.log("Getting data from auth " + tablename + " " + PartitionKey + " " + RowKey);
     tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
       if(!error){
         // result contains the entity
-        console.log("Got data");
+        console.log("Got data from table");
         if(result != null){
           console.log("Setting " + JSON.stringify(result));
           messengerToApp[senderID] = result;
@@ -1178,7 +1180,7 @@ function callSendAPI(messageData) {
         recipientId);
       }
     } else {
-      console.error("callSendAPI error: %s %s", error, JSON.stringify(response));
+      console.error("callSendAPI error: %s %s", error, response["body"]["error"]);
     }
   });  
 }
