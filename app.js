@@ -322,7 +322,8 @@ function receivedMessage(event) {
         console.log("Got data from table");
         if(result != null){
           console.log("Setting " + JSON.stringify(result));
-          messengerToApp[senderID] = result;
+          messengerToApp[senderID] = {routermac: result["routermac"]["_"], appid: result["appid"]["_"], 
+                                    recipientid: result["recipientID"]["_"], key: result["key"]["_"]};
         }else{
           sendTextMessage(senderID, "You are not authenticated");
           return;
@@ -705,8 +706,8 @@ function getRouterStatus(recipientId) {
 function getDialogues(recipientId) {
   
   var auth = messengerToApp[recipientId];
+  console.log("getDialogues");
   console.log(JSON.stringify(auth));
-
   var senddata = {RouterMac:auth.routermac,DeviceMac:auth.appid,Key:auth.key};
   request({
     url: "http://stresstestdomos.azurewebsites.net/v5/app/get_dashboard_dialogues",
