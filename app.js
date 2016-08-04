@@ -311,7 +311,7 @@ function receivedMessage(event) {
     var PartitionKey = "Auth";
     var RowKey = senderID;
     console.log("No authentication " + senderID)
-    console.log("Getting data from auth " + tablename + " " + PartitionKey + " " + RowKey);
+    console.log("Getting data from auth " + "MessengerAuth" + " " + PartitionKey + " " + RowKey);
     tableservice.retrieveEntity("MessengerAuth", PartitionKey, RowKey, function(error, result, response){
       if(!error){
         // result contains the entity
