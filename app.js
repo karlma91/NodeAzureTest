@@ -173,6 +173,18 @@ app.get('/authorize', function(req, res) {
     redirectURISuccess: redirectURISuccess
   });
 });
+/*
+ * Messegner aut button
+ */
+app.get('/messenger', function(req, res) {
+  var appid = req.query['appid'];
+  var routermac = req.query['routermac'];
+
+  res.render('messenger', {
+    appid: appid,
+    routermac: routermac
+  });
+});
 
 /*
  * Verify that the callback came from Facebook. Using the App Secret from 
