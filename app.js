@@ -315,6 +315,7 @@ function receivedMessage(event) {
         // result contains the entity
         console.log("Got data");
         if(result != null){
+          console.log("Setting " + JSON.stringify(result));
           messengerToApp[senderID] = result;
         }else{
           sendTextMessage(senderID, "You are not authenticated");
@@ -325,6 +326,8 @@ function receivedMessage(event) {
         return;
       }
     });
+    sendTextMessage(senderID, "Try again");
+    return;
   }
 
   if (isEcho) {
