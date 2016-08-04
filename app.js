@@ -33,7 +33,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
-var tablename = "RouterAppTable";
 var messengerToApp = {};
 
 /*
@@ -237,14 +236,15 @@ function receivedAuthentication(event) {
     appid: entGen.String(appid),
     recipientID: entGen.String(recipientID)
   };
-
-  tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
+  console.log("Get pk: " + PartitionKey + " rk: " + RowKey);  
+  tableservice.retrieveEntity("RouterAppTable", PartitionKey, RowKey, function(error, result, response){
     if(!error){
       // result contains the entity
-      console.log("Got data");
       if(result != null){
+        console.log("Got app");
         tableservice.retrieveEntity("routerlog", "Router", routermac, function(error, result, response){
           if(!error){
+            console.log("Got router");
             var rkey = result.AppAuthKey['_'];
             messengerToApp[senderID] = {routermac: routermac, appid: appid, recipientid: recipientID, key: rkey};
             entity.key = entGen.String(rkey);
@@ -312,7 +312,7 @@ function receivedMessage(event) {
     var RowKey = senderID;
     console.log("No authentication " + senderID)
     console.log("Getting data from auth " + tablename + " " + PartitionKey + " " + RowKey);
-    tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
+    tableservice.retrieveEntity("MessengerAuth", PartitionKey, RowKey, function(error, result, response){
       if(!error){
         // result contains the entity
         console.log("Got data from table");
