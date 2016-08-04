@@ -311,7 +311,7 @@ function receivedMessage(event) {
   var messageAttachments = message.attachments;
   var quickReply = message.quick_reply;
 
-  if(!messengerToApp[senderID]){
+  if(!messengerToApp[senderID] && !messengerToApp[recipientID]){
     var PartitionKey = "Auth";
     var RowKey = senderID;
     console.log("No authentication " + senderID)
