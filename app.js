@@ -247,9 +247,10 @@ function receivedAuthentication(event) {
             console.log("Got router");
             var rkey = result.AppAuthKey['_'];
             messengerToApp[senderID] = {routermac: routermac, appid: appid, recipientid: recipientID, key: rkey};
-            entity.key = entGen.String(rkey);
+            entity.key = entGen.String(senderID);
+            entity.RowKey = entGen.String(rkey);
             console.log("inserting to messengerauth " + JSON.stringify(entity));
-            tableservice.insertEntity('MessengerAuth',entity, function (error, result, response) {
+            tableservice.insertOrReplaceEntity('MessengerAuth',entity, function (error, result, response) {
               if(!error){
                 console.log("Inserted to messengerauth");
               }else{
