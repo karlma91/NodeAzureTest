@@ -33,6 +33,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
+var tablename = "RouterAppTable";
 var messengerToApp = {};
 
 /*
@@ -225,7 +226,6 @@ function receivedAuthentication(event) {
   var passThroughParam = event.optin.ref;
   var routermac = passThroughParam.split('_')[0];
   var appid = passThroughParam.split('_')[1];
-  var tablename = "RouterAppTable";
   var PartitionKey = routermac;
   var RowKey = appid;
 
@@ -308,8 +308,23 @@ function receivedMessage(event) {
   var quickReply = message.quick_reply;
 
   if(!messengerToApp[senderID]){
-    sendTextMessage(senderID, "You are not authenticated");
-    return;
+    var PartitionKey = "Auth";
+    var RowKey = senderID;
+    tableservice.retrieveEntity(tablename, PartitionKey, RowKey, function(error, result, response){
+      if(!error){
+        // result contains the entity
+        console.log("Got data");
+        if(result != null){
+          messengerToApp[senderID] = result;
+        }else{
+          sendTextMessage(senderID, "You are not authenticated");
+          return;
+        }
+      }else{
+        sendTextMessage(senderID, "You are not authenticated");
+        return;
+      }
+    });
   }
 
   if (isEcho) {
